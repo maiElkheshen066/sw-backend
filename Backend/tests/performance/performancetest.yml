@@ -1,0 +1,22 @@
+config:
+  target: "http://localhost:5000" # Replace with your application's base URL
+  phases:
+    - duration: 60          # Test duration in seconds
+      arrivalRate: 10       # Number of requests per second
+  payload:
+    path: "test-user.csv"    # File containing test data
+    fields:
+      - email
+      - password
+scenarios:
+  - name: "User Login Test"
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "{{ password }}"
+
+
+
+ # TODO  artillery run performancetest.yml --output results.json
