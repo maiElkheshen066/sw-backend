@@ -1,0 +1,6 @@
+          style={{ animation: "spin 40s linear infinite" }}
+
+/*
+complete User login register senarios
+and after user log in add cart button
+*/

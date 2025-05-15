@@ -1,0 +1,24 @@
+.gradient-text {
+    background: linear-gradient(to right, #fff, #444);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
+  }
+  
+  /* Ensure the grid sections take up equal height */
+  .grid > div {
+    min-height: 50vh;
+  }
+  
+  /* Animation for spin (used in your original code) */
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  
