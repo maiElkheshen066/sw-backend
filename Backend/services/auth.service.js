@@ -1,10 +1,8 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
-const crypto = require("crypto");
 const {
   generateTokenAndSetCookie,
 } = require("../utils/jwt.utils");
-const sendEmail = require("../utils/email.utils");
 
 
 
@@ -66,58 +64,3 @@ exports.loginUser = async (userData, res) => {
 
 
 
-exports.forgotPassword = async (email, resetURL) => {
-  // get user from email
-  const user = await User.findOne({ email: email });
-  if (!user) {
-    throw new Error("this email not exist");
-  }
-  // generate random reset token
-  const resetToken = crypto.randomBytes(20).toString("hex");
-  const hashedResetToken = crypto
-    .createHash("sha256")
-    .update(resetToken)
-    .digest("hex");
-
-  // Save hashed token in DB
-  user.resetPasswordToken = hashedResetToken;
-  user.resetPasswordExpiresAt = Date.now() + 3600000; // 1 hour
-
-  await user.save({ validateBeforeSave: false });
-  // send reset url email
-  const resetLink = `${resetURL}/${resetToken}`;
-  const message = `Forgot your password ? click here ${resetLink}`;
-  await sendEmail({
-    email: user.email,
-    subject: "Your password reset token (valid for 1 hour)",
-    message,
-  });
-
-  return user;
-};
-
-exports.resetPasswordService = async (token, password, passwordConfirm) => {
-  // verify token
-  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-
-  const user = await User.findOne({
-    resetPasswordToken: hashedToken,
-    resetPasswordExpiresAt: { $gt: Date.now() },
-  });
-  if (!user) {
-    throw new Error("Token is invalid or has expired");
-  }
-  if(password!==passwordConfirm)
-  {
-        throw new Error("Passwords do not match");
-
-  }
-  // update password
-  user.password = password;
-  user.passwordConfirm = passwordConfirm;
-  user.resetPasswordToken = undefined;
-  user.resetPasswordExpiresAt = undefined;
-  await user.save();
-
-  return user;
-};

@@ -11,19 +11,6 @@ const getMeals = async (req, res) => {
   }
 };
 
-// controllers/meals.controller.js
-const Meal = require('../models/meal');
-
-const addMultipleMeals = async (req, res) => {
-  try {
-    const meals = await meal.insertMany(req.body); // expects array of meals
-    res.status(201).json(meals);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-
 const getMealsByName = async (req, res) => {
   try {
     const meal = await mealService.getMealsByName(req.params.name);
@@ -41,6 +28,9 @@ const getMealsByCategory = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+
+
 
 // ____________________Admin staff
 
@@ -73,4 +63,12 @@ const deleteMeal = async (req, res) => {
   }
 };
 
+const addMultipleMeals = async (req, res) => {
+  try {
+    const meals = await meal.insertMany(req.body); // expects array of meals
+    res.status(201).json(meals);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 module.exports = { getMeals,addMultipleMeals, getMealsByName, getMealsByCategory,addMeal, updateMeal, deleteMeal };
