@@ -1,10 +1,11 @@
 const express = require('express');
-const cors = require('cors');//Cross-Origin Resource Sharing 
+const cors = require('cors');
+const helmet = require('helmet'); // <-- add this
 const connectDB = require('./config/db');
 
 const authRoutes = require('./routes/auth');
 const mealsRoutes = require('./routes/meal.routes');
-const profileRoutes=require('./routes/profile.routes')
+const profileRoutes = require('./routes/profile.routes');
 
 const rateLimit = require('express-rate-limit');
 const app = express();
@@ -13,8 +14,10 @@ require('dotenv').config();
 
 connectDB();
 app.use(cors()); // to allow diff reqests
-app.use(express.json()); //framework makes it easier to build web servers and APIs.
 
+app.use(helmet()); // <-- add this line for helmet
+
+app.use(express.json()); // framework makes it easier to build web servers and APIs.
 
 // Apply rate limiting
 const limiter = rateLimit({
@@ -25,9 +28,9 @@ const limiter = rateLimit({
 });
 app.use("/api/auth", limiter);
 
-app.get('/', (req,res) => res.send('API is running...')); 
+app.get('/', (req, res) => res.send('API is running...'));
 app.use('/api/auth', authRoutes);
 app.use('/api/meals', mealsRoutes);
-app.use('/api/profile',profileRoutes)
+app.use('/api/profile', profileRoutes);
 
 module.exports = app;
