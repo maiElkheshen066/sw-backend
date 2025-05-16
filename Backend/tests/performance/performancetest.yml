@@ -1,22 +1,40 @@
 config:
-  target: "http://localhost:5000" # Replace with your application's base URL
+  target: "http://localhost:5000"
   phases:
-    - duration: 60          # Test duration in seconds
-      arrivalRate: 10       # Number of requests per second
-  payload:
-    path: "test-user.csv"    # File containing test data
-    fields:
-      - email
-      - password
+    - duration: 60
+      arrivalRate: 10   # Start with 10 users/s
+      rampTo: 30        # up to 30 users per second
+    - duration: 120
+      arrivalRate: 30   # hold at 30 users/sec for 2 minutes
+  defaults:             # All requests will use this HTTP header by default (for JSON APIs)
+    headers:
+      Content-Type: "application/json"
 scenarios:
-  - name: "User Login Test"
+  - name: "User Registration and Login"
     flow:
+      - post:
+          url: "/api/auth/register"
+          json:
+            firstName: "Test"
+            SecondName: "User"
+            email: "user_{{ $uuid }}@example.com"
+            password: "TestPassword123!"
+            passwordConfirm: "TestPassword123!"
+            role: "user"
+            gender: "male"
+            mobileNumber: "1234567890"
+          capture:
+            - json: "$.data.user.newUser.email"
+              as: "registered_email"
+      - think: 1  # wait 1 second before next request
       - post:
           url: "/api/auth/login"
           json:
-            email: "{{ email }}"
-            password: "{{ password }}"
-
-
+            email: "{{ registered_email }}"
+            password: "TestPassword123!"
+          capture:
+            - json: "$.data.token.token"
+              as: "access_token"
+      - think: 1
 
  # TODO  artillery run performancetest.yml --output results.json

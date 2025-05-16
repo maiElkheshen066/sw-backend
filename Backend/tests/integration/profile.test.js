@@ -4,6 +4,8 @@ const app = require("../../app");
 const User = require("../../models/User");
 const jwt = require("jsonwebtoken");
 
+//  npx jest tests/integration/profile.test
+
 const testUser = {
   firstName: "Profile",
   SecondName: "Tester", // Use capital S

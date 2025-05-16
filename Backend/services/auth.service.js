@@ -25,15 +25,14 @@ exports.createUser = async (userData, res) => {
     mobileNumber
 
   });
-  await newUser.save(); // hashed password here then save to DB
+  await newUser.save(); 
 
 
   const accessToken = generateTokenAndSetCookie(res, newUser);
 
     // 6. Return user info
   return {
-newUser,
-
+   newUser,
     accessToken,
   };
 };

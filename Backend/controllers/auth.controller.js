@@ -19,8 +19,11 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  try {
+  
+try {
+   console.log("Login Request Body:", req.body);
     const token = await authService.loginUser(req.body, res);
+  
     res.status(200).json({
       success: true,
       status: 'success',

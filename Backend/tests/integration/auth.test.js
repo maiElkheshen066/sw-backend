@@ -48,7 +48,7 @@ describe("User Registration", () => {
       });
 
     expect(res.statusCode).toEqual(400);
-    expect(res.body.message).toMatch(/Passwords do not match/);
+    expect(res.body.message).toMatch(/User validation failed: passwordConfirm: Passwords don't match/);
   });
 
   it("should fail if email is invalid", async () => {
