@@ -81,7 +81,7 @@ describe('Auth Service', () => {
     });
   });
 
-describe('Auth Service - loginUser', () => {
+  describe('Auth Service - loginUser', () => {
     it('should login user and return token', async () => {
       bcrypt.compare.mockResolvedValue(true); // Simulate correct password
       generateTokenAndSetCookie.mockReturnValue('mocked-token');

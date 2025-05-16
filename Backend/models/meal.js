@@ -1,5 +1,3 @@
-// models/Meal.js
-
 const mongoose = require("mongoose");
 
 const MealSchema = new mongoose.Schema(

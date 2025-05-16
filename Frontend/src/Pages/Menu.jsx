@@ -1,4 +1,3 @@
-// src/Pages/Menu.jsx
 import React, { useState, useEffect } from "react";
 import ReactSlider from "react-slider";
 import FoodCard from "../Components/menu/foodItem";
@@ -11,7 +10,6 @@ import axios from "axios";
 const Menu = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 100]);
   const [foodItems, setFoodItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,14 +40,11 @@ const Menu = () => {
     const matchesCategory =
       selectedCategories.length === 0 ||
       selectedCategories.includes(item.category);
-    const matchesTags =
-      selectedTags.length === 0 ||
-      selectedTags.every((tag) => item.tags.includes(tag));
     const matchesPrice =
       parseFloat(item.price) >= priceRange[0] &&
       parseFloat(item.price) <= priceRange[1];
 
-    return matchesSearch && matchesCategory && matchesTags && matchesPrice;
+    return matchesSearch && matchesCategory && matchesPrice;
   });
 
   const toggleSelection = (list, setList, value) => {
@@ -72,7 +67,7 @@ const Menu = () => {
     >
       <div className="text-center mb-10">
         <h1 className="text-4xl font-extrabold text-yellow-400">
-          Explore Our Menu <span>🍽</span>
+          Explore Our Menu <span role="img" aria-label="plate">🍽</span>
         </h1>
         <p className="text-lg text-white mt-2">
           Discover delicious meals and customize your preferences.
@@ -94,7 +89,13 @@ const Menu = () => {
           <div className="mb-6">
             <h3 className="font-semibold text-lg mb-3 text-white">Category</h3>
             <div className="space-y-2">
-              {["vegetarian", "non-veg", "dessert"].map((category) => (
+              {[
+                "Vegetarian",
+                "Non-Vegetarian",
+                "Dessert",
+                "Biryani",
+                "Snack"
+              ].map((category) => (
                 <div
                   key={category}
                   className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
@@ -116,29 +117,10 @@ const Menu = () => {
             </div>
           </div>
 
-          <div className="mb-6">
-            <h3 className="font-semibold text-lg mb-3 text-white">Tags</h3>
-            <div className="space-y-2">
-              {["spicy", "gluten-free", "popular", "grilled", "low-calorie"].map(
-                (tag) => (
-                  <div
-                    key={tag}
-                    className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
-                      selectedTags.includes(tag)
-                        ? "bg-blue-100 text-blue-500"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
-                    onClick={() => toggleSelection(selectedTags, setSelectedTags, tag)}
-                  >
-                    <span className="capitalize">{tag}</span>
-                  </div>
-                )
-              )}
-            </div>
-          </div>
-
           <div className="p-4 bg-white rounded-2xl shadow-lg border border-gray-100">
-            <h3 className="text-gray-800 text-xl font-semibold mb-4">Price Range</h3>
+            <h3 className="text-gray-800 text-xl font-semibold mb-4">
+              Price Range
+            </h3>
             <ReactSlider
               className="w-full h-2 bg-neutral-200 rounded-md"
               thumbClassName="w-5 h-5 bg-white border-2 border-primary shadow-lg rounded-full cursor-pointer hover:scale-110 transition-all duration-200"
@@ -167,7 +149,7 @@ const Menu = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredItems.length > 0 ? (
                 filteredItems.map((item) => (
-                  <FoodCard key={item.id} item={item} onAddToCart={addToCart} />
+                  <FoodCard key={item.id || item._id} item={item} onAddToCart={addToCart} />
                 ))
               ) : (
                 <p className="col-span-full text-center text-gray-500">

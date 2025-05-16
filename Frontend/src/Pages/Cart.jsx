@@ -1,4 +1,3 @@
-// src/Pages/cart.jsx
 import React, { useState, useEffect } from "react";
 import bgImg from "../assets/Images/bg.png";
 import { CreditCardPayment } from "../strategies/creditCardPayment";
@@ -55,6 +54,36 @@ const Cart = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
+      <style>
+        {`
+          .cart-btn {
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: background 0.2s, color 0.2s;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            line-height: 1;
+            margin: 0 0.25rem;
+            cursor: pointer;
+          }
+          .cart-btn--inc, .cart-btn--dec {
+            background: #000;
+            color: #fff;
+          }
+          .cart-btn--inc:hover, .cart-btn--dec:hover {
+            background: #222;
+          }
+          .cart-btn--remove {
+            background: #ef4444;
+            color: #fff;
+          }
+          .cart-btn--remove:hover {
+            background: #dc2626;
+          }
+        `}
+      </style>
       <div
         className="w-full max-w-4xl rounded-xl shadow-md grid grid-cols-1 md:grid-cols-2 gap-6 p-6"
         style={{
@@ -67,7 +96,7 @@ const Cart = () => {
           <h2 className="text-xl font-semibold text-gray-800">Order Summary</h2>
           {cartItems.length > 0 ? (
             cartItems.map((item) => (
-              <div key={item.id} className="flex justify-between items-center">
+              <div key={item.id || item._id} className="flex justify-between items-center">
                 <div>
                   <p className="text-gray-800">{item.name}</p>
                   <p className="text-sm text-gray-600">
@@ -76,23 +105,23 @@ const Cart = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <button
-                    onClick={() => updateQuantity(item.id, -1)}
-                    className="px-2 py-1 bg-gray-200 rounded"
+                    onClick={() => updateQuantity(item.id || item._id, -1)}
+                    className="cart-btn cart-btn--dec"
                     aria-label={`Decrease quantity of ${item.name}`}
                   >
                     -
                   </button>
                   <span>{item.quantity}</span>
                   <button
-                    onClick={() => updateQuantity(item.id, 1)}
-                    className="px-2 py-1 bg-gray-200 rounded"
+                    onClick={() => updateQuantity(item.id || item._id, 1)}
+                    className="cart-btn cart-btn--inc"
                     aria-label={`Increase quantity of ${item.name}`}
                   >
                     +
                   </button>
                   <button
-                    onClick={() => removeFromCart(item.id)}
-                    className="text-red-500"
+                    onClick={() => removeFromCart(item.id || item._id)}
+                    className="cart-btn cart-btn--remove"
                     aria-label={`Remove ${item.name} from cart`}
                   >
                     Remove
@@ -143,7 +172,7 @@ const Cart = () => {
             </h2>
             <div className="space-y-2">
               {cartItems.map((item) => (
-                <p key={item.id}>
+                <p key={item.id || item._id}>
                   {item.name}: ${(item.price * item.quantity).toFixed(2)}
                 </p>
               ))}

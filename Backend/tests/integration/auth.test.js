@@ -5,10 +5,9 @@ const app = require("../../app"); // Your Express app
 const User = require("../../models/User"); // Your User model
 // TODO  npx jest tests/integration/auth.test
 
-// Test user data (ensure field names match the model)
 const testUser = {
   firstName: "Test",
-  SecondName: "User", // Corrected to match the model
+  SecondName: "User",
   email: "test@example.com",
   gender:"female",
 mobileNumber:"+201442303",
@@ -21,12 +20,10 @@ beforeAll(async () => {
   await mongoose.connect(process.env.TEST_DATABASE_URL);
 });
 
-// Clear database before each test
 beforeEach(async () => {
   await User.deleteMany({});
 });
 
-// Close database connection after tests
 afterAll(async () => {
   await mongoose.connection.close();
 });
@@ -34,17 +31,12 @@ afterAll(async () => {
 describe("User Registration", () => {
   it("should register a new user successfully", async () => {
     const res = await request(app).post("/api/auth/register").send(testUser);
-  console.log("Register Response:", JSON.stringify(res.body, null, 2));
-
     expect(res.statusCode).toEqual(201);
     expect(res.body.status).toBe("success");
-    expect(res.body.message).toBe(
-      "User registered successfully. Please check your email."
-    );
- expect(res.body.data.user.newUser).toHaveProperty("email", testUser.email);
-
-expect(typeof res.body.data.user.newUser.password).toBe("string");
-expect(res.body.data.user.newUser.password).not.toBe(testUser.password);
+    expect(res.body.message).toBe("User registered successfully. Please check your email."  );
+    expect(res.body.data.user.newUser).toHaveProperty("email", testUser.email);
+    expect(typeof res.body.data.user.newUser.password).toBe("string");
+    expect(res.body.data.user.newUser.password).not.toBe(testUser.password);
   });
 
   it("should fail if passwords don't match", async () => {

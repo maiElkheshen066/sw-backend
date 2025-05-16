@@ -20,8 +20,6 @@ const AppRoutes = () => (
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/Cart" element={<Cart />} />
-
-        {/* <Route path="/about" element={<About />} /> */}
         <Route path="/menu" element={<Menu />} />
       </Routes>
     </MainLayout>
