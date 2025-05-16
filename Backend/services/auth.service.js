@@ -9,7 +9,7 @@ const sendEmail = require("../utils/email.utils");
 
 
 exports.createUser = async (userData, res) => {
-  const { firstName,SecondName, email, password, passwordConfirm, role } = userData;
+  const { firstName,SecondName, email, password, passwordConfirm, role,gender,mobileNumber } = userData;
  // 1. Check if user exists
   const existingUser = await User.findOne({ email });
   if (existingUser) throw new Error("User already exists");
@@ -23,6 +23,8 @@ exports.createUser = async (userData, res) => {
     password,
     passwordConfirm, // passwordConfirm is not stored in DB but is used for validation
     role,
+    gender,
+    mobileNumber
 
   });
   await newUser.save(); // hashed password here then save to DB
@@ -32,11 +34,7 @@ exports.createUser = async (userData, res) => {
 
     // 6. Return user info
   return {
-    id: newUser._id,
-    firstName: newUser.firstName,
-    SecondName:newUser.SecondName,
-    email: newUser.email,
-    role,
+newUser,
 
     accessToken,
   };

@@ -29,16 +29,19 @@ const userSchema = new mongoose.Schema(
       minlength: [6, "Password must be at least 6 characters"],
       // select: false, // Don't show password in response
     },
-    passwordConfirm: {
-      type: String,
-      required: [true, "Password confirmation is required"],
-      validate: {
-        validator: function (el) {
-          return el === this.password;
-        },
-        message: "Passwords do not match",
-      },
+passwordConfirm: {
+  type: String,
+  required: function() {
+    // Only required if password is modified
+    return this.isModified('password');
+  },
+  validate: {
+    validator: function(el) {
+      return el === this.password;
     },
+    message: "Passwords don't match",
+  }
+},
     profilePicture: {
       type: String,
       default: "https://res.cloudinary.com/dvghbsyda/image/upload/v1745606481/296fe121-5dfa-43f4-98b5-db50019738a7_cd8ks9.jpg",
@@ -47,6 +50,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["user", "admin"],
       default: "user",
+    },
+    gender:{
+      type:String,
+      default:"unknown"
+    },
+    mobileNumber:{
+      type:String,
+      default:"unknown"
     },
     resetPasswordToken: String,
     resetPasswordExpiresAt: Date,

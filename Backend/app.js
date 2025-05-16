@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
-const usersRoutes = require('./routes/users.routes');
-
+const mealsRoutes = require('./routes/meal.routes');
+const profileRoutes=require('./routes/profile.routes')
 const rateLimit = require('express-rate-limit');
 const app = express();
 
@@ -11,6 +11,7 @@ require('dotenv').config();
 connectDB();
 app.use(cors());
 app.use(express.json());
+
 
 // Apply rate limiting
 const limiter = rateLimit({
@@ -21,8 +22,8 @@ const limiter = rateLimit({
 });
 app.use("/api/auth", limiter);
 
-app.get('/', (req, res) => res.send('API is running...'));
-app.use('/api/users', usersRoutes);
+app.get('/', () => res.send('API is running...'));
 app.use('/api/auth', authRoutes);
-
+app.use('/api/meals', mealsRoutes);
+app.use('/api/profile',profileRoutes)
 module.exports = app;

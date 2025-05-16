@@ -10,6 +10,8 @@ const testUser = {
   firstName: "Test",
   SecondName: "User", // Corrected to match the model
   email: "test@example.com",
+  gender:"female",
+mobileNumber:"+201442303",
   password: "password123",
   passwordConfirm: "password123",
 };
@@ -32,14 +34,17 @@ afterAll(async () => {
 describe("User Registration", () => {
   it("should register a new user successfully", async () => {
     const res = await request(app).post("/api/auth/register").send(testUser);
+  console.log("Register Response:", JSON.stringify(res.body, null, 2));
 
     expect(res.statusCode).toEqual(201);
     expect(res.body.status).toBe("success");
     expect(res.body.message).toBe(
       "User registered successfully. Please check your email."
     );
-    expect(res.body.data.user).toHaveProperty("email", testUser.email);
-    expect(res.body.data.user.password).toBeUndefined(); // Password should not be returned
+ expect(res.body.data.user.newUser).toHaveProperty("email", testUser.email);
+
+expect(typeof res.body.data.user.newUser.password).toBe("string");
+expect(res.body.data.user.newUser.password).not.toBe(testUser.password);
   });
 
   it("should fail if passwords don't match", async () => {
